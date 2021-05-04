@@ -1,20 +1,17 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Formik } from "formik";
 import {
-  CardActions,
   Card,
   CardContent,
   CardMedia,
   Button,
   Typography,
   TextField,
-  Link,
-  Grid,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
-import { useDispatch } from "react-redux"
-import * as loginAction from "../../redux/actions/login.action"
+import { useDispatch, useSelector } from "react-redux";
+import * as loginAction from "../../redux/actions/login.action";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login(props) {
   const classes = useStyles();
-  const dispatch = useDispatch()
+  const loginReducer = useSelector((state) => state.loginReducer);
+  const dispatch = useDispatch();
   const [account, setAcount] = React.useState({
     username: "",
     password: "",
@@ -52,9 +50,9 @@ export default function Login(props) {
         <form
           className={classes.form}
           noValidate
-          onSubmit={(e)=>{
-              e.preventDefault()
-              dispatch(loginAction.login({...account}, props.history))
+          onSubmit={(e) => {
+            e.preventDefault();
+            dispatch(loginAction.login({ ...account }, props.history));
           }}
         >
           <TextField
@@ -86,7 +84,9 @@ export default function Login(props) {
               setAcount({ ...account, password: e.target.value });
             }}
           />
-
+          {loginReducer.error && (
+            <Alert severity="error">{loginReducer.result}</Alert>
+          )}
           <Button
             type="submit"
             fullWidth

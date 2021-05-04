@@ -1,8 +1,8 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -10,8 +10,9 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import LayersIcon from "@material-ui/icons/Layers";
+import BarCharIcon from "@material-ui/icons/BarChart"
+import PersonIcon from "@material-ui/icons/Person"
 
 const drawerWidth = 240;
 
@@ -75,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  isActive:{
+    backgroundColor:"#e0f5fd",
+    color:"#0080ff"
+  }
 }));
 
 export default function Menu(props) {
@@ -83,7 +88,7 @@ export default function Menu(props) {
 
   return (
     <div>
-        <Drawer
+      <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: props.open,
@@ -98,27 +103,53 @@ export default function Menu(props) {
       >
         <div className={classes.toolbar}>
           <IconButton onClick={props.handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        {/* Stock */}
+        <ListItem
+          component={NavLink}
+          to="/stock"
+          button
+          key="stock"
+          activeClassName={classes.isActive}
+        >
+          <ListItemIcon>
+            <LayersIcon />
+          </ListItemIcon>
+          <ListItemText primary="Stock" />
+        </ListItem>
+        {/* Report */}
+        <ListItem
+          component={NavLink}
+          to="/report"
+          button
+          key="report"
+          activeClassName={classes.isActive}
+        >
+          <ListItemIcon>
+            <BarCharIcon/>
+          </ListItemIcon>
+          <ListItemText primary="Report" />
+        </ListItem>
+        {/* AboutUS */}
+        <ListItem
+          component={NavLink}
+          to="/aboutus"
+          button
+          key="abouus"
+          activeClassName={classes.isActive}
+        >
+          <ListItemIcon>
+            <PersonIcon/>
+          </ListItemIcon>
+          <ListItemText primary="About" />
+        </ListItem>
       </Drawer>
     </div>
   );

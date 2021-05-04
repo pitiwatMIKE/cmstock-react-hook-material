@@ -1,4 +1,5 @@
 import React from "react";
+import {Link, NavLink} from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,6 +12,7 @@ import clsx from "clsx";
 import {withRouter} from "react-router-dom"
 import * as logoutAction from "../../redux/actions/login.action"
 import { useDispatch } from "react-redux";
+import { ListItem, ListItemText } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -65,7 +67,14 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            {/* <Link to="/stock">CM-Stock</Link> */}
+            <ListItem
+              component={NavLink}
+              to="/stock"
+              button
+            >
+              <ListItemText primary="CM-Stock"/>
+            </ListItem>
           </Typography>
           <Button color="inherit" onClick={() => {
             dispatch(logoutAction.logout(props.history))
