@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -68,7 +68,7 @@ export default function App() {
   useEffect(() => {
     console.log("App create");
     dispatch(loginAction.reLogin());
-  }, []);
+  },[]);
 
   const handleDrawerOpen = () => {
     setOpenDrawer(true);

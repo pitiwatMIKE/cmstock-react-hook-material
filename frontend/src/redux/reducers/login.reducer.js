@@ -1,4 +1,4 @@
-import { LOGIN_FAILED, LOGIN_FETCHING, LOGIN_SUCCESS, LOGOUT } from "../../constants/Constan";
+import { LOGIN_FAILED, LOGIN_FETCHING, LOGIN_SUCCESS, LOGOUT } from "../../constants";
 
 const initialState = {
   result: null,

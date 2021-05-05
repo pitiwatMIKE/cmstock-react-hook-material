@@ -1,4 +1,4 @@
-import { INIT, REGISTER_FAILED, REGISTER_FETCHING, REGISTER_SUCCESS } from "../../constants/Constan"
+import { INIT, REGISTER_FAILED, REGISTER_FETCHING, REGISTER_SUCCESS } from "../../constants"
 
 const initialState = {
     result: null,
