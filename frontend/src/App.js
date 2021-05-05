@@ -66,7 +66,6 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("App create");
     dispatch(loginAction.reLogin());
   },[]);
 
@@ -101,6 +100,7 @@ export default function App() {
             <SecuredRoute exact path="/aboutus" component={AboutUs} />
             <SecuredRoute exact path="/stock/create" component={StockCreate} />
             <SecuredRoute exact path="/stock/edit/:id" component={StockEdit} />
+            <SecuredRoute exact path="/stockCreate" component={StockCreate} />
             <Route
               exact
               path="/"
