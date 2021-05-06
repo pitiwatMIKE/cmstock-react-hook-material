@@ -33,16 +33,44 @@ const doGetProducts = async (dispatch) => {
   }
 };
 
+//get
 export const getProducts = () => {
   return (dispatch) => {
     dispatch(setStateToFetching());
     doGetProducts(dispatch);
   };
 };
-
+//create
 export const addProduct = (formData, history) => {
   return async (dispatch) => {
     await httpClient.post(server.PRODUCT_URL, formData);
     history.push("/stock");
+  };
+};
+//edit
+export const getProductById = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch(setStateToFetching());
+      let result = await httpClient.get(`${server.PRODUCT_URL}/${id}`);
+      dispatch(setStateToSuccess(result.data));
+    } catch (error) {
+      alert(JSON.stringify(error));
+      dispatch(setStateToFailed());
+    }
+  };
+};
+//update
+export const updateProduct = (formData, history) => {
+  return async (dispatch) => {
+    await httpClient.put(server.PRODUCT_URL, formData);
+    history.push("/stock")
+  };
+};
+//delete
+export const deleteProduct = (id) => {
+  return async (dispatch) => {
+    await httpClient.delete(`/stock/product/${id}`);
+    await doGetProducts(dispatch);
   };
 };

@@ -8,10 +8,11 @@ import reportWebVitals from "./reportWebVitals";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import logger from "redux-logger";
+// import logger from "redux-logger";
+import { composeWithDevTools } from 'redux-devtools-extension';
 import reducer from "./redux/reducers";
 
-const store = createStore(reducer, applyMiddleware(thunk, logger));
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
 const ReduxApp = () => (
   <Provider store={store}>

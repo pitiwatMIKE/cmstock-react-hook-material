@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import MaterialTable from "material-table";
 import { forwardRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
-
-
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -26,6 +24,13 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+
+import Paper from "@material-ui/core/Paper";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { useDispatch, useSelector } from "react-redux";
 import * as stockActions from "../../redux/actions/stock.action";
@@ -64,15 +69,93 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Stock() {
+
+export default function Stock(props) {
   const dispatch = useDispatch();
   const stockReducer = useSelector((state) => state.stockReducer);
+  const [open, setOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleClickOpen = (item) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     dispatch(stockActions.getProducts());
   }, []);
 
   const classes = useStyles();
+
+  const showDeletionConfirmDlg = () => {
+    return selectedItem ? (
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Are you sure to delete this item Id : {selectedItem.id}?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={`${imageUrl}/images/${selectedItem.image}`}
+                style={{ width: 50, height: 50, borderRadius: "5%" }}
+              />
+              <span style={{ marginLeft: 20 }}>{selectedItem.name}</span>
+            </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              dispatch(stockActions.deleteProduct(selectedItem.id));
+              handleClose();
+            }}
+            color="secondary"
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    ) : null;
+  };
+
+  const actions = [
+    {
+      icon: () => <Edit style={{ color: "#91979c" }} />,
+      iconProps: { color: "primary" },
+      tooltip: "Edit",
+      onClick: (event, rowData) => {
+        props.history.push("/stock/edit/" + rowData.id);
+      },
+    },
+    {
+      icon: () => <DeleteOutline color="secondary" />,
+      iconProps: { color: "action" },
+      tooltip: "Delete",
+      onClick: (event, rowData) => {
+        handleClickOpen(rowData);
+      },
+    },
+  ];
 
   const columns = [
     {
@@ -138,11 +221,18 @@ export default function Stock() {
   return (
     <div className={classes.tableWidth}>
       <MaterialTable
+        options={{
+          rowStyle: (rowData, index) => ({
+            backgroundColor: index % 2 == 0 ? "#f8faf9" : "#fff",
+          }),
+        }}
         icons={tableIcons}
         columns={columns}
         data={stockReducer.result ? stockReducer.result : []}
         title="Stock"
+        actions={actions}
         components={{
+          Container: (props) => <Paper {...props} elevation={10} />,
           Toolbar: (props) => (
             <div>
               <MTableToolbar {...props} />
@@ -152,7 +242,7 @@ export default function Stock() {
                   variant="contained"
                   color="primary"
                   component={Link}
-                  to="/stockCreate"
+                  to="/stock/create"
                 >
                   Create
                 </Button>
@@ -161,6 +251,7 @@ export default function Stock() {
           ),
         }}
       />
+      {showDeletionConfirmDlg()}
     </div>
   );
 }
